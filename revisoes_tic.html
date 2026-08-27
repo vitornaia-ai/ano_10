@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC Avançado · Revisões Interativas</title>
+    <!-- Font Awesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f9ff 0%, #e3edf7 100%);
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            color: #1a2639;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(4px);
+            border-radius: 48px 48px 32px 32px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 25px 50px -8px rgba(0, 20, 40, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* cabeçalho */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px dashed rgba(30, 60, 114, 0.15);
+            padding-bottom: 1.2rem;
+        }
+
+        .header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #0b2b5c, #2a5b9a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header h1 i {
+            font-size: 2.2rem;
+            color: #1f4e8c;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 8px 12px;
+            border-radius: 60px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+        }
+
+        .header .badge {
+            background: #1f4e8c;
+            color: white;
+            padding: 0.4rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 6px 12px rgba(26, 67, 133, 0.2);
+        }
+
+        /* grid de cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 32px;
+            padding: 1.8rem 1.5rem 2rem;
+            box-shadow: 0 12px 28px -6px rgba(0, 20, 40, 0.08), 0 2px 4px rgba(0,0,0,0.02);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: default;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 24px 40px -12px rgba(18, 52, 106, 0.2);
+            border-color: rgba(70, 130, 200, 0.2);
+        }
+
+        .card-icon {
+            font-size: 2.8rem;
+            color: #1f4e8c;
+            margin-bottom: 0.3rem;
+            opacity: 0.8;
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: #0b2b5c;
+            letter-spacing: -0.3px;
+        }
+
+        .card .sub {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2b4b7a;
+            background: rgba(60, 110, 180, 0.08);
+            display: inline-block;
+            padding: 0.1rem 1rem;
+            border-radius: 40px;
+            margin-bottom: 1rem;
+            letter-spacing: 0.2px;
+            border: 1px solid rgba(60, 110, 180, 0.08);
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #1d2b44;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .card .img-placeholder {
+            background: #dce8f5;
+            border-radius: 24px;
+            padding: 0.8rem 0.5rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #1f3b66;
+            border: 1px solid rgba(255,255,255,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-top: 0.4rem;
+            transition: 0.15s;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02);
+        }
+
+        .card .img-placeholder i {
+            font-size: 2rem;
+            color: #315f97;
+        }
+
+        .card .img-placeholder span {
+            background: rgba(0,0,0,0.02);
+            padding: 0.2rem 1rem;
+            border-radius: 100px;
+            font-weight: 500;
+        }
+
+        .card .ref-link {
+            margin-top: 0.8rem;
+            font-size: 0.8rem;
+            color: #1f4e8c;
+            border-top: 1px solid rgba(0,0,0,0.03);
+            padding-top: 0.8rem;
+            display: flex;
+            gap: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .card .ref-link a {
+            color: #1f4e8c;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px dotted rgba(31, 78, 140, 0.2);
+            transition: 0.15s;
+        }
+
+        .card .ref-link a:hover {
+            color: #0b2b5c;
+            border-bottom-color: #0b2b5c;
+        }
+
+        .card .ref-link i {
+            font-size: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* card especial introdução */
+        .card-intro {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #eef4fc, #dde8f5);
+            border-left: 6px solid #1f4e8c;
+            padding: 1.8rem 2rem;
+        }
+
+        .card-intro h3 {
+            font-size: 1.8rem;
+        }
+
+        /* conclusão */
+        .card-conclusion {
+            grid-column: 1 / -1;
+            background: #e2ebf6;
+            border-radius: 32px;
+            padding: 1.8rem 2rem;
+            margin-top: 0.5rem;
+            border: 1px solid rgba(255,255,255,0.6);
+            text-align: center;
+        }
+
+        .card-conclusion h3 {
+            font-size: 1.8rem;
+            color: #0b2b5c;
+        }
+
+        .card-conclusion p {
+            max-width: 700px;
+            margin: 0.5rem auto 0;
+            font-size: 1.1rem;
+        }
+
+        /* interatividade: clique mostra detalhe */
+        .card.clickable {
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card.clickable:active {
+            transform: scale(0.97);
+        }
+
+        .extra-info {
+            background: rgba(255, 255, 240, 0.3);
+            border-radius: 16px;
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+            border-left: 4px solid #1f4e8c;
+            backdrop-filter: blur(2px);
+        }
+
+        .extra-info.show {
+            display: block;
+            animation: fadeSlide 0.25s ease;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(4px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            color: #2d4b78;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            letter-spacing: 0.3px;
+        }
+
+        .footer i {
+            margin: 0 4px;
+        }
+
+        /* responsivo */
+        @media (max-width: 680px) {
+            .container { padding: 1.5rem 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .grid { gap: 1.2rem; }
+            .card { padding: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <!-- cabeçalho -->
+    <div class="header">
+        <h1><i class="fas fa-microchip"></i> TIC · Revisões</h1>
+        <span class="badge"><i class="far fa-comment-dots"></i> interativo</span>
+    </div>
+
+    <!-- grid principal -->
+    <div class="grid">
+
+        <!-- INTRODUÇÃO (card especial) -->
+        <div class="card card-intro clickable" data-extra="TIC: Tecnologias de Informação e Comunicação — fundamentais para a comunicação, aprendizagem e trabalho modernos.">
+            <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+            <h3>Introdução</h3>
+            <div class="sub">visão geral</div>
+            <p>Este documento consolida os principais conceitos introdutórios das Tecnologias de Informação e Comunicação (TIC).</p>
+            <div class="img-placeholder" style="background: #cbddec;">
+                <i class="fas fa-arrow-right"></i> <span>clique para mais</span>
+            </div>
+            <div class="extra-info" id="extra-intro">📘 As TIC abrangem tecnologias, dados e mecanismos de comunicação digital. Permitem criar, armazenar, processar e partilhar informação.</div>
+        </div>
+
+        <!-- 1. TIC -->
+        <div class="card clickable" data-extra="A expressão TIC refere-se ao conjunto de recursos tecnológicos (redes, software, hardware) que tratam e transmitem informação.">
+            <div class="card-icon"><i class="fas fa-globe"></i></div>
+            <h3>1. TIC</h3>
+            <div class="sub">Tecnologias de Informação e Comunicação</div>
+            <p>As TIC abrangem tecnologias, dados e mecanismos de comunicação digital. Permitem criar, armazenar, processar e partilhar informação.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-user-graduate"></i> <span>Figura 1 — TIC</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 2. Hardware e Software -->
+        <div class="card clickable" data-extra="Hardware: componentes físicos (CPU, memória, etc.). Software: programas e instruções que controlam o hardware.">
+            <div class="card-icon"><i class="fas fa-desktop"></i></div>
+            <h3>2. Hardware & Software</h3>
+            <div class="sub">componentes físicos e lógicos</div>
+            <p>Hardware corresponde aos componentes físicos. Software corresponde aos programas e instruções que controlam o hardware.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-server"></i> <span>Figura 2 — Hardware</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 3. Periféricos -->
+        <div class="card clickable" data-extra="Periféricos de entrada (teclado, rato), saída (monitor, impressora) e entrada/saída (ecrã tátil, modem).">
+            <div class="card-icon"><i class="fas fa-keyboard"></i></div>
+            <h3>3. Periféricos</h3>
+            <div class="sub">interação utilizador</div>
+            <p>Os periféricos permitem a interação entre utilizador e computador, podendo ser de entrada, saída ou entrada/saída.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-print"></i> <span>Figura 3 — Periféricos</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 4. Sistema Operativo -->
+        <div class="card clickable" data-extra="O SO gere recursos, ficheiros, dispositivos e aplicações. Ex: Windows, Linux, macOS.">
+            <div class="card-icon"><i class="fas fa-cogs"></i></div>
+            <h3>4. Sistema Operativo</h3>
+            <div class="sub">gestor de recursos</div>
+            <p>O sistema operativo gere recursos, ficheiros, dispositivos e aplicações.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-window-maximize"></i> <span>Figura 4 — SO</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 5. Redes de Computadores -->
+        <div class="card clickable" data-extra="As redes permitem a comunicação entre dispositivos e a partilha de recursos (impressoras, ficheiros, Internet).">
+            <div class="card-icon"><i class="fas fa-network-wired"></i></div>
+            <h3>5. Redes</h3>
+            <div class="sub">comunicação e partilha</div>
+            <p>As redes permitem a comunicação de dispositivos e a partilha de recursos.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-sitemap"></i> <span>Figura 5 — Redes</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 6. Internet e WWW -->
+        <div class="card clickable" data-extra="A Internet é a infraestrutura global; a Web (WWW) é um dos serviços que funciona sobre essa infraestrutura (HTTP, sites, etc.).">
+            <div class="card-icon"><i class="fas fa-wifi"></i></div>
+            <h3>6. Internet & WWW</h3>
+            <div class="sub">infraestrutura e serviço</div>
+            <p>A Internet é a infraestrutura global; a Web é um dos serviços que funciona sobre essa infraestrutura.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-globe-americas"></i> <span>Figura 6 — Internet</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- 7. Segurança Digital -->
+        <div class="card clickable" data-extra="A segurança digital visa proteger dispositivos, dados e identidade digital. Inclui antivírus, firewalls, autenticação e boas práticas.">
+            <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>7. Segurança Digital</h3>
+            <div class="sub">proteção e privacidade</div>
+            <p>A segurança digital visa proteger dispositivos, dados e identidade digital.</p>
+            <div class="img-placeholder">
+                <i class="fas fa-lock"></i> <span>Figura 7 — Segurança</span>
+            </div>
+            <div class="extra-info"></div>
+        </div>
+
+        <!-- CONCLUSÃO (card especial) -->
+        <div class="card card-conclusion">
+            <div class="card-icon"><i class="fas fa-flag-checkered"></i></div>
+            <h3>Conclusão</h3>
+            <p>As TIC são fundamentais para a comunicação, aprendizagem e trabalho modernos. A compreensão dos seus componentes e boas práticas de segurança digital é essencial.</p>
+            <div style="margin-top: 0.8rem; font-size: 0.9rem; background: rgba(255,255,255,0.3); padding: 0.3rem 1.2rem; border-radius: 60px; display: inline-block;">
+                <i class="fas fa-check-circle" style="color: #1f4e8c;"></i> revisão completa
+            </div>
+        </div>
+    </div>
+
+    <!-- referências -->
+    <div style="margin-top: 2.2rem; background: rgba(255,255,255,0.2); border-radius: 30px; padding: 1rem 1.8rem; border: 1px solid rgba(255,255,255,0.5);">
+        <p style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: center; font-size: 0.9rem;">
+            <span><i class="fas fa-link"></i> Referências: </span>
+            <a href="#" style="color: #1f4e8c; text-decoration: none; border-bottom: 1px dotted #9bb7d4;">stileex.xyz/types-computer-software</a>
+            <a href="#" style="color: #1f4e8c; text-decoration: none; border-bottom: 1px dotted #9bb7d4;">todotecnologia-eso.blogspot.com</a>
+            <a href="#" style="color: #1f4e8c; text-decoration: none; border-bottom: 1px dotted #9bb7d4;">rafaelarroyoruiz.blogspot.com</a>
+            <a href="#" style="color: #1f4e8c; text-decoration: none; border-bottom: 1px dotted #9bb7d4;">stileex.xyz/facebook-vs-site</a>
+        </p>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-arrow-pointer"></i> clique em qualquer card para ver informação extra · TIC Avançado
+    </div>
+</div>
+
+<!-- JavaScript interativo -->
+<script>
+    (function() {
+        // seleciona todos os cards com a classe 'clickable'
+        const cards = document.querySelectorAll('.card.clickable');
+
+        cards.forEach(card => {
+            // elemento extra-info dentro deste card
+            const extraDiv = card.querySelector('.extra-info');
+            // texto extra a partir do atributo data-extra
+            const extraText = card.getAttribute('data-extra') || '';
+
+            // se existir texto extra, coloca no extra-info
+            if (extraText && extraDiv) {
+                extraDiv.textContent = extraText;
+            }
+
+            // evento de clique: toggle da classe 'show' no extra-info
+            card.addEventListener('click', function(e) {
+                // previne que cliques em links dentro do card disparem
+                if (e.target.closest('a')) return;
+
+                const extra = this.querySelector('.extra-info');
+                if (extra) {
+                    // se tiver texto, alterna a classe show
+                    if (extra.textContent.trim().length > 0) {
+                        extra.classList.toggle('show');
+                    } else {
+                        // se não tiver texto, mostra um fallback
+                        extra.textContent = 'ℹ️ Informação adicional disponível.';
+                        extra.classList.toggle('show');
+                    }
+                } else {
+                    // fallback: se não existir extra-info, cria um alerta simples
+                    alert('📌 ' + (this.getAttribute('data-extra') || 'Conceito TIC'));
+                }
+            });
+        });
+
+        // card de introdução: já tem extra definido, mas garantimos o toggle
+        const introCard = document.querySelector('.card-intro');
+        if (introCard) {
+            const extraIntro = introCard.querySelector('.extra-info');
+            if (extraIntro && !extraIntro.textContent.trim()) {
+                extraIntro.textContent = '📘 As TIC abrangem tecnologias, dados e mecanismos de comunicação digital. Permitem criar, armazenar, processar e partilhar informação.';
+            }
+        }
+
+        // pequena animação: ao carregar, mostra um card com destaque
+        setTimeout(() => {
+            const firstCard = document.querySelector('.card.clickable');
+            if (firstCard) {
+                const extra = firstCard.querySelector('.extra-info');
+                if (extra && extra.textContent.trim().length > 0) {
+                    extra.classList.add('show');
+                    // esconde após 4 segundos
+                    setTimeout(() => {
+                        extra.classList.remove('show');
+                    }, 4000);
+                }
+            }
+        }, 500);
+    })();
+</script>
+
+</body>
+</html>
