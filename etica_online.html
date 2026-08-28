@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ética e Responsabilidade Digital - React</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- React & ReactDOM via CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f9fc;
+            color: #1a2a3a;
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        #root {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #0b2b44, #1b4a6b);
+            color: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .header h1 i {
+            margin-right: 15px;
+            color: #6bc7f0;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 15px auto 0;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px 35px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            border-left: 8px solid #1b4a6b;
+        }
+
+        .section-card h2 {
+            font-size: 2rem;
+            color: #0b2b44;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-card h2 i {
+            color: #1b6b9b;
+            font-size: 2rem;
+            width: 48px;
+            text-align: center;
+        }
+
+        .section-card .subtitle {
+            color: #4a6a7a;
+            font-weight: 500;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e8f0f5;
+            padding-bottom: 10px;
+        }
+
+        .section-card p {
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+
+        /* Flip Card Grid */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin: 25px 0 10px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 260px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            border-radius: 18px;
+        }
+
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .flip-card-front {
+            background: #f0f7fc;
+            border: 2px solid #d4e6f0;
+        }
+
+        .flip-card-front i {
+            font-size: 2.8rem;
+            color: #1b6b9b;
+            margin-bottom: 12px;
+        }
+
+        .flip-card-front .caption {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #0b2b44;
+        }
+
+        .flip-card-front .desc {
+            font-size: 0.9rem;
+            color: #3a5a6a;
+            margin-top: 4px;
+        }
+
+        .flip-card-front .flip-hint {
+            margin-top: 12px;
+            font-size: 0.75rem;
+            color: #6a8a9a;
+            background: rgba(27, 107, 155, 0.1);
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .flip-card-back {
+            background: #1b4a6b;
+            color: white;
+            transform: rotateY(180deg);
+            border: 2px solid #1b4a6b;
+        }
+
+        .flip-card-back i {
+            font-size: 2rem;
+            color: #6bc7f0;
+            margin-bottom: 12px;
+        }
+
+        .flip-card-back .example-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .flip-card-back .example-text {
+            font-size: 0.92rem;
+            opacity: 0.92;
+            line-height: 1.5;
+        }
+
+        .flip-card-back .click-hint {
+            margin-top: 12px;
+            font-size: 0.7rem;
+            opacity: 0.6;
+        }
+
+        /* Risk Table */
+        .risk-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0 15px;
+            font-size: 0.98rem;
+            background: #f8fbfd;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+        }
+
+        .risk-table th {
+            background: #1b4a6b;
+            color: white;
+            font-weight: 600;
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        .risk-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e2edf5;
+        }
+
+        .risk-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .risk-table tr {
+            transition: background 0.2s;
+        }
+
+        .risk-table tbody tr {
+            cursor: pointer;
+        }
+
+        .risk-table tbody tr:hover td {
+            background: #eaf3fa;
+        }
+
+        .risk-table .icon-cell {
+            text-align: center;
+            font-size: 1.4rem;
+            color: #c44536;
+            width: 60px;
+        }
+
+        .risk-table .click-indicator {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6a8a9a;
+            width: 70px;
+        }
+
+        .risk-table .click-indicator i {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        /* Strategy List */
+        .strategy-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            margin: 20px 0 10px;
+        }
+
+        .strategy-item {
+            background: #e6f0f8;
+            padding: 10px 20px 10px 18px;
+            border-radius: 40px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.98rem;
+            flex: 1 0 auto;
+            max-width: 100%;
+        }
+
+        .strategy-item i {
+            color: #1b6b9b;
+            font-size: 1.3rem;
+            width: 28px;
+            text-align: center;
+        }
+
+        /* Pillars */
+        .pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 25px 0 10px;
+        }
+
+        .pillar {
+            background: #f0f7fc;
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            border-bottom: 5px solid #1b6b9b;
+        }
+
+        .pillar i {
+            font-size: 2.6rem;
+            color: #1b6b9b;
+            margin-bottom: 12px;
+        }
+
+        .pillar h3 {
+            font-size: 1.4rem;
+            color: #0b2b44;
+            margin-bottom: 6px;
+        }
+
+        .pillar p {
+            font-size: 0.95rem;
+            color: #2a4a5a;
+            margin-bottom: 0;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 520px;
+            width: 92%;
+            border-radius: 24px;
+            padding: 35px 30px 30px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #5a7a8a;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #c44536;
+        }
+
+        .modal-icon {
+            font-size: 2.8rem;
+            color: #c44536;
+            margin-bottom: 12px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #0b2b44;
+            margin-bottom: 8px;
+        }
+
+        .modal-example {
+            background: #f0f7fc;
+            padding: 18px 22px;
+            border-radius: 16px;
+            margin: 15px 0 5px;
+            font-size: 1.02rem;
+            border-left: 5px solid #c44536;
+        }
+
+        .modal-example i {
+            color: #c44536;
+            margin-right: 10px;
+        }
+
+        .modal-footer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #5a7a8a;
+            text-align: right;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Footer */
+        .footer-note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #5a7a8a;
+            padding: 30px 0 10px;
+            border-top: 2px solid #dbe8f0;
+            margin-top: 20px;
+        }
+
+        .footer-note i {
+            color: #c44536;
+        }
+
+        /* Responsive */
+        @media (max-width: 700px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .section-card {
+                padding: 20px;
+            }
+            .section-card h2 {
+                font-size: 1.6rem;
+                flex-wrap: wrap;
+            }
+            .flip-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .flip-card {
+                height: 230px;
+            }
+            .strategy-item {
+                flex: 1 1 100%;
+            }
+            .pillars {
+                grid-template-columns: 1fr;
+            }
+            .risk-table {
+                font-size: 0.82rem;
+            }
+            .risk-table th, .risk-table td {
+                padding: 10px 10px;
+            }
+            .risk-table .click-indicator {
+                width: 40px;
+                font-size: 0.65rem;
+            }
+            .modal-content {
+                padding: 25px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .flip-grid {
+                grid-template-columns: 1fr;
+            }
+            .flip-card {
+                height: 210px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+// ----- DATA -----
+
+// Dados para os cartões flip (Identidade Digital, Riscos, Proteção, Reputação, Cidadania)
+const flipItems = [
+  {
+    id: 'identity',
+    icon: 'fa-user-circle',
+    caption: 'Identidade Digital',
+    desc: 'A tua pegada online',
+    exampleTitle: 'Exemplo: Pesquisa pelo teu nome',
+    exampleText: 'Um recrutador encontra as tuas publicações de há 5 anos. O que vê define a primeira impressão sobre ti.'
+  },
+  {
+    id: 'risks',
+    icon: 'fa-triangle-exclamation',
+    caption: 'Riscos da Partilha',
+    desc: 'O que pode correr mal',
+    exampleTitle: 'Exemplo: Oversharing',
+    exampleText: 'Publicas uma foto das férias com a localização ativada. Alguém sabe que a tua casa está vazia.'
+  },
+  {
+    id: 'protection',
+    icon: 'fa-shield',
+    caption: 'Estratégias de Proteção',
+    desc: 'Como te protegeres',
+    exampleTitle: 'Exemplo: 2FA ativado',
+    exampleText: 'Ativas a autenticação de dois fatores. Mesmo que alguém descubra a tua palavra-passe, não consegue aceder à tua conta.'
+  },
+  {
+    id: 'reputation',
+    icon: 'fa-star',
+    caption: 'Impacto na Reputação',
+    desc: 'Consequências duradouras',
+    exampleTitle: 'Exemplo: Comentário impulsivo',
+    exampleText: 'Um comentário negativo numa publicação pode ser visto por futuros colegas de trabalho e manchar a tua imagem.'
+  },
+  {
+    id: 'citizenship',
+    icon: 'fa-people-group',
+    caption: 'Cidadania Digital',
+    desc: 'Ser ativo e responsável',
+    exampleTitle: 'Exemplo: Denunciar ciberbullying',
+    exampleText: 'Vês uma publicação ofensiva. Em vez de ignorar, denuncias à plataforma, ajudando a criar um ambiente mais seguro.'
+  }
+];
+
+// Dados para os riscos na tabela
+const riskData = [
+  {
+    icon: 'fa-user-secret',
+    risk: 'Exposição a criminosos',
+    example: 'Publicas uma foto com a localização ativada durante as férias. Isso indica que a tua casa está vazia, podendo atrair roubos.'
+  },
+  {
+    icon: 'fa-id-card',
+    risk: 'Roubo de identidade',
+    example: 'Alguém usa a tua foto e dados pessoais para criar perfis falsos em teu nome, prejudicando a tua reputação.'
+  },
+  {
+    icon: 'fa-bullseye',
+    risk: 'Ataques direcionados',
+    example: 'Partilhas o nome do teu animal de estimação. Um atacante usa essa informação para adivinhar a tua palavra-passe ou perguntas de segurança.'
+  },
+  {
+    icon: 'fa-trash-can',
+    risk: 'Perda de controlo',
+    example: 'Publicas uma foto constrangedora. Mesmo que a apagues, alguém já fez um print ou guardou a imagem — ela permanece na internet.'
+  },
+  {
+    icon: 'fa-reputation',
+    risk: 'Danos à reputação',
+    example: 'Uma publicação ofensiva de há anos é descoberta por um recrutador. Isso pode custar-te uma oportunidade de emprego ou uma vaga na universidade.'
+  }
+];
+
+// ----- COMPONENTES -----
+
+// Componente do cartão flip
+function FlipCard({ item }) {
+  const [flipped, setFlipped] = useState(false);
+
+  const toggleFlip = () => setFlipped(!flipped);
+
+  return (
+    <div className={`flip-card ${flipped ? 'flipped' : ''}`} onClick={toggleFlip}>
+      <div className="flip-card-inner">
+        <div className="flip-card-front">
+          <i className={`fas ${item.icon}`}></i>
+          <div className="caption">{item.caption}</div>
+          <div className="desc">{item.desc}</div>
+          <div className="flip-hint"><i className="fas fa-rotate-right"></i> Clica para exemplo</div>
+        </div>
+        <div className="flip-card-back">
+          <i className="fas fa-lightbulb"></i>
+          <div className="example-title">{item.exampleTitle}</div>
+          <div className="example-text">{item.exampleText}</div>
+          <div className="click-hint"><i className="fas fa-rotate-left"></i> Clica para voltar</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Componente Modal
+function Modal({ risk, onClose }) {
+  // Fechar com tecla ESC
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [onClose]);
+
+  // Fechar ao clicar no overlay
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) onClose();
+  };
+
+  return (
+    <div className="modal-overlay" onClick={handleOverlayClick}>
+      <div className="modal-content">
+        <button className="modal-close" onClick={onClose} aria-label="Fechar">
+          <i className="fas fa-xmark"></i>
+        </button>
+        <div className="modal-icon">
+          <i className={`fas ${risk.icon}`}></i>
+        </div>
+        <h3 className="modal-title">{risk.risk}</h3>
+        <p style={{ color: '#3a5a6a', marginBottom: '10px' }}>
+          <strong>Exemplo concreto:</strong>
+        </p>
+        <div className="modal-example">
+          <i className="fas fa-quote-left"></i>
+          {risk.example}
+        </div>
+        <div className="modal-footer">
+          <i className="fas fa-info-circle"></i> Clique fora ou na cruz para fechar
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Componente principal
+function App() {
+  const [selectedRisk, setSelectedRisk] = useState(null);
+
+  const openModal = (risk) => setSelectedRisk(risk);
+  const closeModal = () => setSelectedRisk(null);
+
+  return (
+    <div>
+      {/* HEADER */}
+      <header className="header">
+        <h1><i className="fas fa-shield-halved"></i> Ética & Responsabilidade Digital</h1>
+        <p>Identidade, privacidade, reputação e cidadania — navega com consciência no mundo digital.</p>
+      </header>
+
+      {/* SECÇÃO 1: IDENTIDADE DIGITAL - com flip cards */}
+      <section className="section-card">
+        <h2><i className="fas fa-user-circle"></i> 1. Identidade Digital</h2>
+        <div className="subtitle">A tua pegada online — quem és na internet?</div>
+        <p><strong>A identidade digital</strong> é a imagem virtual que construímos através do que partilhamos e do que outros partilham sobre nós. Empresas, universidades e futuros empregadores analisam a tua presença digital.</p>
+
+        <div className="flip-grid">
+          {flipItems.map(item => (
+            <FlipCard key={item.id} item={item} />
+          ))}
+        </div>
+        <p style={{ marginTop: '10px', fontSize: '0.9rem', color: '#4a6a7a', textAlign: 'center' }}>
+          <i className="fas fa-hand-pointer" style={{ marginRight: '6px' }}></i> Clica em cada cartão para ver um exemplo concreto.
+        </p>
+      </section>
+
+      {/* SECÇÃO 2: RISCOS - com tabela e modais */}
+      <section className="section-card">
+        <h2><i className="fas fa-triangle-exclamation" style={{ color: '#c44536' }}></i> 2. Riscos da Partilha Online</h2>
+        <div className="subtitle">O que pode correr mal quando partilhas demais?</div>
+        <p>Partilhar informação pessoal não é intrinsecamente mau, mas <strong>a falta de cuidado pode trazer consequências sérias</strong>. Clica em cada linha da tabela para ver um exemplo concreto.</p>
+
+        <table className="risk-table">
+          <thead>
+            <tr>
+              <th style={{ width: '50px' }}></th>
+              <th>Risco</th>
+              <th>Descrição</th>
+              <th style={{ width: '80px', textAlign: 'center' }}><i className="fas fa-mouse-pointer"></i></th>
+            </tr>
+          </thead>
+          <tbody>
+            {riskData.map((risk, index) => (
+              <tr key={index} onClick={() => openModal(risk)}>
+                <td className="icon-cell"><i className={`fas ${risk.icon}`}></i></td>
+                <td><strong>{risk.risk}</strong></td>
+                <td>{risk.example.split('.')[0] + '.'}</td>
+                <td className="click-indicator">
+                  <i className="fas fa-circle-info"></i>
+                  <span style={{ display: 'block', fontSize: '0.65rem', color: '#1b6b9b' }}>ver exemplo</span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      {/* SECÇÃO 3: ESTRATÉGIAS */}
+      <section className="section-card">
+        <h2><i className="fas fa-shield" style={{ color: '#2a7a4a' }}></i> 3. Estratégias de Proteção</h2>
+        <div className="subtitle">Como proteger a tua privacidade e os teus dados</div>
+        <p>Adota estas práticas para navegar com mais segurança e controlo:</p>
+        <div className="strategy-list">
+          <span className="strategy-item"><i className="fas fa-gear"></i> Revê as definições de privacidade</span>
+          <span className="strategy-item"><i className="fas fa-search"></i> Pesquisa o teu nome regularmente</span>
+          <span className="strategy-item"><i className="fas fa-brain"></i> Pensa antes de publicar</span>
+          <span className="strategy-item"><i className="fas fa-key"></i> Palavras-passe fortes e diferentes</span>
+          <span className="strategy-item"><i className="fas fa-mobile-screen-button"></i> Autenticação de dois fatores (2FA)</span>
+          <span className="strategy-item"><i className="fas fa-wifi"></i> Cuidado com Wi-Fi públicas</span>
+          <span className="strategy-item"><i className="fas fa-user-group"></i> Organiza a lista de amigos</span>
+        </div>
+        <div style={{ marginTop: '15px', background: '#e8f4e8', padding: '14px 20px', borderRadius: '14px' }}>
+          <i className="fas fa-lightbulb" style={{ color: '#2a7a4a', marginRight: '10px' }}></i>
+          <strong>Exemplo prático:</strong> Ativa a verificação em duas etapas (2FA) nas tuas contas. Mesmo que alguém descubra a tua palavra-passe, não conseguirá aceder sem o código enviado para o teu telemóvel.
+        </div>
+      </section>
+
+      {/* SECÇÃO 4: REPUTAÇÃO */}
+      <section className="section-card">
+        <h2><i className="fas fa-star" style={{ color: '#d4a02b' }}></i> 4. Impacto na Reputação e Relações</h2>
+        <div className="subtitle">As tuas ações digitais têm consequências duradouras</div>
+        <p><strong>Cada "like", comentário ou partilha</strong> contribui para a tua pegada digital e influencia a forma como os outros te percebem.</p>
+        <div style={{ background: '#f8f0e6', padding: '18px 22px', borderRadius: '16px', margin: '15px 0' }}>
+          <i className="fas fa-quote-left" style={{ color: '#d4a02b', marginRight: '8px' }}></i>
+          <strong>Exemplo:</strong> <em>"Se alguém que admiro ou um futuro empregador lesse as minhas publicações, que imagem teria de mim?"</em>
+          <br />
+          <span style={{ fontSize: '0.95rem', color: '#4a5a5a' }}>Uma publicação impulsiva pode custar-te uma oportunidade de emprego ou prejudicar uma amizade.</span>
+        </div>
+      </section>
+
+      {/* SECÇÃO 5: CIDADANIA DIGITAL */}
+      <section className="section-card">
+        <h2><i className="fas fa-people-group" style={{ color: '#1b6b9b' }}></i> 5. Cidadania Digital Ativa</h2>
+        <div className="subtitle">Ser um cidadão digital é mais do que estar seguro — é contribuir para um ambiente online saudável.</div>
+        <div className="pillars">
+          <div className="pillar">
+            <i className="fas fa-user-shield"></i>
+            <h3>Estar Seguro</h3>
+            <p>Proteger as tuas informações e estar atento a ameaças como phishing e scams.</p>
+          </div>
+          <div className="pillar">
+            <i className="fas fa-hand-holding-heart"></i>
+            <h3>Ser Respeitoso</h3>
+            <p>Tratar os outros com empatia e pedir consentimento antes de partilhar imagens de outras pessoas.</p>
+          </div>
+          <div className="pillar">
+            <i className="fas fa-circle-info"></i>
+            <h3>Estar Informado</h3>
+            <p>Verificar fontes antes de partilhar, evitando amplificar desinformação.</p>
+          </div>
+        </div>
+        <div style={{ background: '#1b3a4a', color: 'white', padding: '18px 24px', borderRadius: '18px', marginTop: '20px' }}>
+          <i className="fas fa-flag" style={{ color: '#f5d742', marginRight: '12px' }}></i>
+          <strong>Exemplo prático:</strong> Se vês um caso de ciberbullying, não ignores. Denuncia à plataforma e apoia a vítima. Pequenas ações criam um ambiente digital mais seguro para todos.
+        </div>
+      </section>
+
+      {/* MODAL */}
+      {selectedRisk && (
+        <Modal risk={selectedRisk} onClose={closeModal} />
+      )}
+
+      {/* FOOTER */}
+      <div className="footer-note">
+        <i className="fas fa-graduation-cap"></i> Conteúdo desenvolvido para apoio educativo sobre Ética e Responsabilidade Digital.
+        <br />Baseado nas orientações da Rede de Bibliotecas Escolares (RBE) e nas Aprendizagens Essenciais para o 3.º ciclo.
+      </div>
+    </div>
+  );
+}
+
+// Render
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
